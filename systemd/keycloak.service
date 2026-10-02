@@ -1,0 +1,42 @@
+[Unit]
+Description=Keycloak Identity and Access Management
+Documentation=https://www.keycloak.org/documentation
+After=network-online.target postgresql.service
+Wants=network-online.target
+Requires=postgresql.service
+
+[Service]
+Type=simple
+
+User=keycloak
+Group=keycloak
+
+#WorkingDirectory=/opt/keycloak
+WorkingDirectory=/opt/keycloak/keycloak-26.7.4
+
+EnvironmentFile=/etc/keycloak/keycloak.env
+EnvironmentFile=/etc/keycloak/bootstrap.env
+
+#ExecStart=/opt/keycloak/bin/kc.sh start --optimized
+#ExecStart=/opt/keycloak/keycloak-26.7.4/bin/kc.sh start --optimized
+
+#ExecStart=/opt/keycloak/keycloak-26.7.4/bin/kc.sh start --optimized --http-enabled=true --hostname=auth.exit1.space
+
+ExecStart=/opt/keycloak/keycloak-26.7.4/bin/kc.sh start --optimized --http-enabled=true --hostname=https://auth.exit1.space --proxy-headers=xforwarded
+
+Restart=on-failure
+RestartSec=10
+
+TimeoutStartSec=300
+TimeoutStopSec=120
+
+LimitNOFILE=65536
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

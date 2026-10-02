@@ -1,0 +1,12 @@
+*.env
+*.env.*
+!*.env.example
+*.dump
+*.dump.*
+*.tar
+*.tar.gz
+*.zst
+*.zip
+*.tmp
+*.bak
+workspace/
