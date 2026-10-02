@@ -172,49 +172,14 @@ EOF
                 '''
             }
         }
-        stage('Upload PostgreSQL to S3') {
+        stage('Upload Database Backup to S3') {
             steps {
                 s3Upload(
-                    profileName: "${S3_PROFILE}",
-                    consoleLogLevel: 'INFO',
-                    dontSetBuildResultOnFailure: false,
-                    dontWaitForConcurrentBuildCompletion: false,
-                    pluginFailureResultConstraint: 'FAILURE',
+                    profileName: 'keycloak-s3',
                     entries: [[
-                        bucket: "${S3_BUCKET}/postgres/${BUILD_TIMESTAMP}",
-                        sourceFile:
-                            "keycloak-${BUILD_TIMESTAMP}.dump.zst",
-                        excludedFile: '',
-                        selectedRegion:
-                            "${S3_REGION}",
-                        storageClass:
-                            'STANDARD',
-                        noUploadOnFailure:
-                            true,
-                        uploadFromSlave:
-                            true,
-                        managedArtifacts:
-                            false,
-                        flatten:
-                            true,
-                        gzipFiles:
-                            false,
-                        keepForever:
-                            true,
-                        showDirectlyInBrowser:
-                            false,
-                        useServerSideEncryption:
-                            true
-                    ]],
-                    userMetadata: [[
-                        key: 'backup-type',
-                        value: 'keycloak-postgresql'
-                    ], [
-                        key: 'build-number',
-                        value: "${BUILD_NUMBER}"
-                    ], [
-                        key: 'build-timestamp',
-                        value: "${BUILD_TIMESTAMP}"
+                        sourceFile: "keycloak-backup/keycloak-${BUILD_TIMESTAMP}.dump.zst",
+                        bucket: "${S3_BUCKET}",
+                        path: "keycloak-backup/"
                     ]]
                 )
             }
@@ -222,46 +187,11 @@ EOF
         stage('Upload Configuration to S3') {
             steps {
                 s3Upload(
-                    profileName: "${S3_PROFILE}",
-                    consoleLogLevel: 'INFO',
-                    dontSetBuildResultOnFailure: false,
-                    dontWaitForConcurrentBuildCompletion: false,
-                    pluginFailureResultConstraint: 'FAILURE',
+                    profileName: 'keycloak-s3',
                     entries: [[
-                        bucket: "${S3_BUCKET}/config/${BUILD_TIMESTAMP}",
-                        sourceFile:
-                            "config/keycloak-config-${BUILD_TIMESTAMP}.tar.gz",
-                        excludedFile: '',
-                        selectedRegion:
-                            "${S3_REGION}",
-                        storageClass:
-                            'STANDARD',
-                        noUploadOnFailure:
-                            true,
-                        uploadFromSlave:
-                            true,
-                        managedArtifacts:
-                            false,
-                        flatten:
-                            true,
-                        gzipFiles:
-                            false,
-                        keepForever:
-                            true,
-                        showDirectlyInBrowser:
-                            false,
-                        useServerSideEncryption:
-                            true
-                    ]],
-                    userMetadata: [[
-                        key: 'backup-type',
-                        value: 'keycloak-configuration'
-                    ], [
-                        key: 'build-number',
-                        value: "${BUILD_NUMBER}"
-                    ], [
-                        key: 'build-timestamp',
-                        value: "${BUILD_TIMESTAMP}"
+                        sourceFile: "keycloak-backup/config/keycloak-config-${BUILD_TIMESTAMP}.tar.gz",
+                        bucket: "${S3_BUCKET}",
+                        path: "keycloak-backup/config/"
                     ]]
                 )
             }
@@ -269,46 +199,11 @@ EOF
         stage('Upload Manifest to S3') {
             steps {
                 s3Upload(
-                    profileName: "${S3_PROFILE}",
-                    consoleLogLevel: 'INFO',
-                    dontSetBuildResultOnFailure: false,
-                    dontWaitForConcurrentBuildCompletion: false,
-                    pluginFailureResultConstraint: 'FAILURE',
+                    profileName: 'keycloak-s3',
                     entries: [[
-                        bucket: "${S3_BUCKET}/manifests/${BUILD_TIMESTAMP}",
-                        sourceFile:
-                            "manifest-${BUILD_TIMESTAMP}.txt",
-                        excludedFile: '',
-                        selectedRegion:
-                            "${S3_REGION}",
-                        storageClass:
-                            'STANDARD',
-                        noUploadOnFailure:
-                            true,
-                        uploadFromSlave:
-                            true,
-                        managedArtifacts:
-                            false,
-                        flatten:
-                            true,
-                        gzipFiles:
-                            false,
-                        keepForever:
-                            true,
-                        showDirectlyInBrowser:
-                            false,
-                        useServerSideEncryption:
-                            true
-                    ]],
-                    userMetadata: [[
-                        key: 'backup-type',
-                        value: 'keycloak-manifest'
-                    ], [
-                        key: 'build-number',
-                        value: "${BUILD_NUMBER}"
-                    ], [
-                        key: 'build-timestamp',
-                        value: "${BUILD_TIMESTAMP}"
+                        sourceFile: "keycloak-backup/manifest-${BUILD_TIMESTAMP}.txt",
+                        bucket: "${S3_BUCKET}",
+                        path: "keycloak-backup/"
                     ]]
                 )
             }
