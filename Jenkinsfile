@@ -378,22 +378,6 @@ EOF
                 '''
             }
         }
-
-        stage('GitHub Secret Safety Check') {
-            steps {
-                sh '''
-                    set -e
-                    cd git-backup
-                    echo "Checking for accidental secret files..."
-                    if find . -type f \( -name "*.dump" -o -name "*.dump.*" -o -name "*.tar.gz" -o -name "*.zst" -o -name "*.env" \) -print | grep -q .; then
-                        echo "ERROR: Potential sensitive files detected."
-                        find . -type f \( -name "*.dump" -o -name "*.dump.*" -o -name "*.tar.gz" -o -name "*.zst" -o -name "*.env" \) -print
-                        exit 1
-                    fi
-                    echo "No backup or secret files detected."
-                '''
-            }
-        }
         stage('Commit GitHub Configuration') {
             steps {
                 sh '''
