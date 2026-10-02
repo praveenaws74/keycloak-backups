@@ -1,7 +1,5 @@
-```groovy
 pipeline {
     agent any
-
     environment {
         BACKUP_HOST = 'keycloak'
         S3_BUCKET = 'my-keycloak-backups'
@@ -11,13 +9,11 @@ pipeline {
         GIT_BRANCH = 'main'
         BACKUP_DIR = "${WORKSPACE}/keycloak-backup"
     }
-
     options {
         timestamps()
         disableConcurrentBuilds()
         buildDiscarder(logRotator(numToKeepStr: '30'))
     }
-
     stages {
         stage('Prepare') {
             steps {
@@ -37,7 +33,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Test Keycloak Connection') {
             steps {
                 sh '''
@@ -48,7 +43,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Backup PostgreSQL') {
             steps {
                 sh '''
@@ -66,7 +60,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Backup Keycloak Configuration') {
             steps {
                 sh '''
@@ -81,7 +74,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Validate Backups') {
             steps {
                 sh '''
@@ -98,7 +90,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Create Manifest') {
             steps {
                 sh '''
@@ -142,7 +133,6 @@ EOF
                 '''
             }
         }
-
         stage('Upload PostgreSQL to S3') {
             steps {
                 s3Upload(
@@ -174,7 +164,6 @@ EOF
                 )
             }
         }
-
         stage('Upload Configuration to S3') {
             steps {
                 s3Upload(
@@ -206,7 +195,6 @@ EOF
                 )
             }
         }
-
         stage('Upload Manifest to S3') {
             steps {
                 s3Upload(
@@ -238,7 +226,6 @@ EOF
                 )
             }
         }
-
         stage('Prepare GitHub Repository') {
             steps {
                 sh '''
@@ -252,7 +239,6 @@ EOF
                 '''
             }
         }
-
         stage('Update GitHub Configuration') {
             steps {
                 sh '''
@@ -295,7 +281,6 @@ EOF
                 '''
             }
         }
-
         stage('Commit GitHub Configuration') {
             steps {
                 sh '''
@@ -313,7 +298,6 @@ EOF
                 '''
             }
         }
-
         stage('Backup Summary') {
             steps {
                 sh '''
@@ -334,7 +318,6 @@ EOF
             }
         }
     }
-
     post {
         always {
             sh 'rm -rf "${BACKUP_DIR}" git-backup'
@@ -347,4 +330,3 @@ EOF
         }
     }
 }
-```
