@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    triggers {
+        cron('H 7 * * 0')
+    }
     environment {
         BACKUP_HOST = 'keycloak'
         S3_BUCKET = 'my-keycloak-backups'
