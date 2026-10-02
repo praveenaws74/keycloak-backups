@@ -384,8 +384,6 @@ EOF
                 sh '''
                     set -e
                     cd git-backup
-                    git config user.name "Jenkins"
-                    git config user.email "jenkins@localhost"
                     git add \
                         .gitignore \
                         config/keycloak.env.example \
