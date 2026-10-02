@@ -46,6 +46,7 @@ pipeline {
                     ssh \
                       -o BatchMode=yes \
                       -o ConnectTimeout=10 \
+                      -o StrictHostKeyChecking=no \
                       "${BACKUP_HOST}" \
                       'hostname'
 
