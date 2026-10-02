@@ -376,6 +376,7 @@ EOF
         failure {
             echo "${RED}${BOLD}✗ KEYCLOAK BACKUP JOB FAILED${RESET}"
             echo "${YELLOW}Check the Jenkins console output for the failed stage.${RESET}"
+            mail to: 'praveenkumarhg8@gmail.com', subject: "Failed Pipeline: ${currentBuild.fullDisplayName}", body: "Servers Maintenance Failed ! ${env.BUILD_URL}"
         }
         aborted {
             echo "${YELLOW}${BOLD}⚠ KEYCLOAK BACKUP JOB ABORTED${RESET}"
